@@ -33,10 +33,11 @@ header p{color:var(--text2);font-size:.95rem;margin-top:4px}
 .input-section label{font-weight:600;font-size:1.05rem;display:block;margin-bottom:10px}
 textarea{width:100%;min-height:200px;background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--radius);padding:16px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.95rem;resize:vertical;transition:border .2s}
 textarea:focus{outline:none;border-color:var(--blue)}
-.btn-primary{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:14px 32px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-sm);font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-sm);font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s}
 .btn-primary:hover{background:#1d4ed8;transform:translateY(-1px);box-shadow:0 4px 20px rgba(37,99,235,.35)}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
-.btn-demo{display:inline-flex;align-items:center;gap:8px;margin-top:16px;margin-left:12px;padding:14px 28px;background:transparent;color:var(--cyan);border:1px solid var(--cyan);border-radius:var(--radius-sm);font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-demo{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:transparent;color:var(--cyan);border:1px solid var(--cyan);border-radius:var(--radius-sm);font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s}
 .btn-demo:hover{background:rgba(6,182,212,.1);transform:translateY(-1px)}
 .btn-demo:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .powered{color:var(--text3);font-size:.8rem;margin-top:10px}
@@ -52,6 +53,14 @@ textarea:focus{outline:none;border-color:var(--blue)}
 .error-box{display:none;background:rgba(239,68,68,.1);border:1px solid var(--red);border-radius:var(--radius-sm);padding:20px;text-align:center;margin-top:24px;color:var(--red)}
 .error-box.active{display:block}
 .btn-retry{margin-top:12px;padding:10px 24px;background:var(--red);color:#fff;border:none;border-radius:var(--radius-sm);font-weight:600;cursor:pointer}
+
+/* Demo banner */
+.demo-banner{background:#1e3a5f;color:#93c5fd;padding:10px 16px;border-radius:var(--radius-sm);font-size:.82rem;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+/* Pipeline meta bar */
+.meta-bar{display:flex;flex-wrap:wrap;gap:18px;padding:10px 0;font-size:.75rem;color:var(--text3);border-bottom:1px solid var(--bg3);margin-bottom:16px}
+.meta-bar span b{color:var(--text2)}
+.meta-bar .meta-fail{color:#f87171}
 
 /* Parsed JD */
 .parsed-jd{display:none;margin-top:40px;background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--radius);overflow:hidden}
@@ -93,6 +102,9 @@ textarea:focus{outline:none;border-color:var(--blue)}
 .card-info{flex:1;min-width:200px}
 .card-info h3{font-size:1.1rem;margin-bottom:2px}
 .card-info .subtitle{color:var(--text2);font-size:.88rem}
+.avail-badge{display:inline-block;font-size:.68rem;padding:2px 7px;border-radius:4px;margin-left:6px;vertical-align:middle}
+.avail-not-looking{background:#7f1d1d;color:#fca5a5}
+.avail-default{color:var(--text3);font-size:.75rem}
 .final-score-box{text-align:center;min-width:80px}
 .final-score-box .score-num{font-size:2rem;font-weight:700;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .final-score-box .score-label{font-size:.7rem;text-transform:uppercase;color:var(--text3);letter-spacing:.05em}
@@ -108,6 +120,9 @@ textarea:focus{outline:none;border-color:var(--blue)}
 .badge-hot{background:rgba(239,68,68,.15);color:#f87171}
 .badge-warm{background:rgba(245,158,11,.15);color:var(--amber)}
 .badge-cold{background:rgba(96,165,250,.15);color:#60a5fa}
+
+/* Score breakdown */
+.score-breakdown{font-size:.7rem;color:#64748b;margin-top:6px}
 
 /* Skills */
 .skills-row{margin-top:14px;display:flex;flex-wrap:wrap;gap:4px}
@@ -141,6 +156,7 @@ footer{text-align:center;padding:40px 0 32px;color:var(--text3);font-size:.82rem
   .card-top{flex-direction:column;align-items:stretch}
   .final-score-box{text-align:left}
   .chat-bubble{max-width:85%}
+  .meta-bar{gap:10px}
 }
 </style>
 </head>
@@ -148,7 +164,7 @@ footer{text-align:center;padding:40px 0 32px;color:var(--text3);font-size:.82rem
 
 <header>
   <div class="container">
-    <h1>⚡ TalentPulse</h1>
+    <h1>&#9889; TalentPulse</h1>
     <p>AI-Powered Talent Scouting &amp; Engagement</p>
   </div>
 </header>
@@ -158,8 +174,10 @@ footer{text-align:center;padding:40px 0 32px;color:var(--text3);font-size:.82rem
   <section class="input-section" id="inputSection">
     <label for="jdInput">Paste your Job Description</label>
     <textarea id="jdInput" placeholder="Paste your Job Description here..."></textarea>
-    <button class="btn-primary" id="scoutBtn" onclick="handleScout()">Scout Candidates &rarr;</button>
-    <button class="btn-demo" id="demoBtn" onclick="handleDemo()">&#9889; Try Demo</button>
+    <div class="btn-row">
+      <button class="btn-primary" id="scoutBtn" onclick="handleScout()">Scout Candidates &rarr;</button>
+      <button class="btn-demo" id="demoBtn" onclick="handleDemo()">&#9889; Try Demo</button>
+    </div>
     <p class="powered">Powered by Gemini 1.5 Flash</p>
   </section>
 
@@ -178,8 +196,8 @@ footer{text-align:center;padding:40px 0 32px;color:var(--text3);font-size:.82rem
   <!-- Parsed JD -->
   <section class="parsed-jd" id="parsedJd">
     <div class="parsed-jd-header" id="parsedJdToggle" onclick="toggleParsedJd()">
-      <h3>📋 Parsed Job Description</h3>
-      <span class="chevron">▼</span>
+      <h3>&#128203; Parsed Job Description</h3>
+      <span class="chevron">&#9660;</span>
     </div>
     <div class="parsed-jd-body" id="parsedJdBody">
       <div class="parsed-jd-content" id="parsedJdContent"></div>
@@ -188,8 +206,10 @@ footer{text-align:center;padding:40px 0 32px;color:var(--text3);font-size:.82rem
 
   <!-- Results -->
   <section class="results-section" id="resultsSection">
+    <div id="demoBanner"></div>
+    <div id="metaBar"></div>
     <div class="results-header">
-      <h2>🏆 Ranked Shortlist</h2>
+      <h2>&#127942; Ranked Shortlist</h2>
       <p id="pipelineSummary"></p>
     </div>
     <div id="candidatesList"></div>
@@ -197,7 +217,7 @@ footer{text-align:center;padding:40px 0 32px;color:var(--text3);font-size:.82rem
 </main>
 
 <footer>
-  <div class="container">Built for Catalyst Hackathon — Deccan AI Experts</div>
+  <div class="container">Built for Catalyst Hackathon &mdash; Deccan AI Experts</div>
 </footer>
 
 <script>
@@ -211,16 +231,20 @@ function showLoader(){
   document.getElementById('parsedJd').classList.remove('active');
   document.getElementById('resultsSection').classList.remove('active');
   document.getElementById('scoutBtn').disabled = true;
+  document.getElementById('demoBtn').disabled = true;
   let i = 0;
   const el = document.getElementById('loaderStep');
   el.textContent = STEPS[0];
   stepInterval = setInterval(()=>{i=(i+1)%STEPS.length;el.textContent=STEPS[i]},2500);
 }
+
 function hideLoader(){
   document.getElementById('loader').classList.remove('active');
   document.getElementById('scoutBtn').disabled = false;
+  document.getElementById('demoBtn').disabled = false;
   clearInterval(stepInterval);
 }
+
 function showError(msg){
   hideLoader();
   const box = document.getElementById('errorBox');
@@ -231,13 +255,14 @@ function showError(msg){
 async function handleScout(){
   const jd = document.getElementById('jdInput').value.trim();
   if(!jd){alert('Please paste a Job Description first.');return;}
+  if(jd.length < 50){alert('Job description is too short (minimum 50 characters).');return;}
   showLoader();
   try{
     const res = await fetch(`${API}/api/analyze`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({job_description:jd})});
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.detail||`Server error ${res.status}`);}
     const data = await res.json();
     hideLoader();
-    renderResults(data);
+    renderResults(data, false);
   }catch(err){
     showError(err.message||'Failed to connect to the API. Is the server running?');
   }
@@ -250,13 +275,38 @@ async function handleDemo(){
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.detail||`Server error ${res.status}`);}
     const data = await res.json();
     hideLoader();
-    renderResults(data);
+    renderResults(data, true);
   }catch(err){
     showError(err.message||'Failed to load demo. Is the server running?');
   }
 }
 
-function renderResults(data){
+function renderPipelineMeta(meta){
+  if(!meta) return '';
+  let html = '<div class="meta-bar">';
+  html += `<span>&#127919; <b>${meta.candidates_scored_successfully}</b>/${meta.candidates_screened} scored</span>`;
+  html += `<span>&#9889; <b>${meta.total_gemini_calls}</b> API calls</span>`;
+  html += `<span>&#9201; <b>${meta.wall_time_seconds}s</b></span>`;
+  html += `<span>&#9878; Match <b>${Math.round((meta.weights?.match||0.6)*100)}%</b> &middot; Interest <b>${Math.round((meta.weights?.interest||0.4)*100)}%</b></span>`;
+  if(meta.failed_scoring_count > 0){
+    html += `<span class="meta-fail">&#9888; ${meta.failed_scoring_count} scoring failures</span>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+function renderResults(data, isDemo){
+  // Demo banner (FIX-F1)
+  const bannerEl = document.getElementById('demoBanner');
+  if(isDemo){
+    bannerEl.innerHTML = '<div class="demo-banner">&#9889; Pre-computed demo &mdash; no Gemini API calls were made. Paste a real JD above to run live.</div>';
+  } else {
+    bannerEl.innerHTML = '';
+  }
+
+  // Pipeline meta (FIX-F2)
+  document.getElementById('metaBar').innerHTML = renderPipelineMeta(data.pipeline_meta);
+
   // Parsed JD
   const pjd = data.parsed_jd;
   let html = '';
@@ -268,7 +318,6 @@ function renderResults(data){
   html += `<div class="jd-field"><div class="jd-field-label">Preferred Skills</div>${(pjd.preferred_skills||[]).map(s=>`<span class="tag tag-cyan">${esc(s)}</span>`).join('')}</div>`;
   document.getElementById('parsedJdContent').innerHTML = html;
   document.getElementById('parsedJd').classList.add('active');
-  // auto-open
   document.getElementById('parsedJdToggle').classList.add('open');
   document.getElementById('parsedJdBody').classList.add('open');
 
@@ -281,45 +330,56 @@ function renderResults(data){
   (data.shortlist||[]).forEach((item,idx)=>{
     const c = item.candidate;
     const rankClass = `rank-${item.rank}`;
-    const interestEmoji = item.interest_label==='Hot'?'🔥':item.interest_label==='Warm'?'🌤':'❄️';
+    const interestEmoji = item.interest_label==='Hot'?'&#128293;':item.interest_label==='Warm'?'&#127780;':'&#10052;';
     const badgeClass = item.interest_label==='Hot'?'badge-hot':item.interest_label==='Warm'?'badge-warm':'badge-cold';
     const cardId = `card-${idx}`;
 
+    // Availability badge (FIX-F4)
+    const availBadge = c.availability === 'not looking'
+      ? '<span class="avail-badge avail-not-looking">not looking</span>'
+      : `<span class="avail-badge avail-default">${esc(c.availability||'')}</span>`;
+
     let card = `<div class="candidate-card" id="${cardId}">`;
-    card += `<div class="card-top">`;
+    card += '<div class="card-top">';
     card += `<div class="rank-badge ${rankClass}">#${item.rank}</div>`;
-    card += `<div class="card-info"><h3>${esc(c.name)}</h3><div class="subtitle">${esc(c.current_role)} at ${esc(c.current_company)} · ${c.years_experience} yrs · ${esc(c.location)}</div></div>`;
+    card += `<div class="card-info"><h3>${esc(c.name)}</h3><div class="subtitle">${esc(c.current_role)} at ${esc(c.current_company)} &middot; ${c.years_experience} yrs &middot; ${esc(c.location)} ${availBadge}</div></div>`;
     card += `<div class="final-score-box"><div class="score-num">${item.final_score}</div><div class="score-label">Final Score</div></div>`;
-    card += `</div>`;
+    card += '</div>';
 
     // Score bars
-    card += `<div class="score-bars">`;
+    card += '<div class="score-bars">';
     card += `<div class="score-bar-group"><label><span>Match Score</span><span>${item.match_score}</span></label><div class="score-track"><div class="score-fill blue" data-w="${item.match_score}"></div></div></div>`;
     card += `<div class="score-bar-group"><label><span>Interest Score <span class="interest-badge ${badgeClass}">${interestEmoji} ${esc(item.interest_label)}</span></span><span>${item.interest_score}</span></label><div class="score-track"><div class="score-fill cyan" data-w="${item.interest_score}"></div></div></div>`;
-    card += `</div>`;
+    card += '</div>';
+
+    // Score breakdown (FIX-F3)
+    const sb = item.score_breakdown;
+    if(sb){
+      card += `<div class="score-breakdown">Skills coverage: <b>${sb.skills_coverage_pct ?? '—'}%</b> &middot; Experience gap: <b>${sb.experience_gap_years === 0 ? 'none' : sb.experience_gap_years + 'yr short'}</b> &middot; Domain: <b>${sb.domain_match ? '&#10003;' : '&#10007;'}</b></div>`;
+    }
 
     // Skills
-    card += `<div class="skills-row">`;
+    card += '<div class="skills-row">';
     (item.matched_skills||[]).forEach(s=>{card+=`<span class="tag tag-green">${esc(s)}</span>`});
     (item.missing_skills||[]).forEach(s=>{card+=`<span class="tag tag-red">${esc(s)}</span>`});
-    card += `</div>`;
+    card += '</div>';
 
     // Explanation
     if(item.match_explanation) card += `<p class="explanation">${esc(item.match_explanation)}</p>`;
 
     // Conversation toggle
     const convId = `conv-${idx}`;
-    card += `<button class="conv-toggle" onclick="toggleConv('${convId}')">View Conversation →</button>`;
+    card += `<button class="conv-toggle" onclick="toggleConv('${convId}')">View Conversation &rarr;</button>`;
     card += `<div class="conv-body" id="${convId}">`;
-    card += `<div class="chat">`;
+    card += '<div class="chat">';
     (item.conversation||[]).forEach(m=>{
       card += `<div class="chat-msg ${m.role}"><div><div class="chat-role">${m.role}</div><div class="chat-bubble">${esc(m.message)}</div></div></div>`;
     });
-    card += `</div>`;
+    card += '</div>';
     if(item.interest_reasoning) card += `<div class="interest-reason"><strong>Interest Analysis:</strong> ${esc(item.interest_reasoning)}</div>`;
-    card += `</div>`;
+    card += '</div>';
 
-    card += `</div>`;
+    card += '</div>';
     list.innerHTML += card;
   });
 
@@ -338,7 +398,7 @@ function toggleParsedJd(){
 function toggleConv(id){
   document.getElementById(id).classList.toggle('open');
 }
-function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function esc(s){const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
 </script>
 </body>
 </html>
