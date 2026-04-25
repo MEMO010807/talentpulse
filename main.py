@@ -29,7 +29,7 @@ if not GEMINI_API_KEY or GEMINI_API_KEY == "your_gemini_api_key_here":
     print("[WARNING] GEMINI_API_KEY not set. Add it to .env file.")
 
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-2.5-flash")
+model = genai.GenerativeModel("gemini-flash-lite-latest")
 
 # Generation configs (FIX-5)
 deterministic_config = genai.types.GenerationConfig(temperature=0.0)
@@ -217,8 +217,8 @@ def compute_score_breakdown(parsed_jd: dict, candidate: dict) -> dict:
 async def gemini_call_with_retry(
     prompt_parts: list,
     generation_config: Any = None,
-    max_retries: int = 3,
-    call_timeout: float = 25.0,
+    max_retries: int = 5,
+    call_timeout: float = 30.0,
 ) -> str:
     """Call Gemini with exponential backoff and per-call timeout."""
     kwargs: dict[str, Any] = {}
@@ -300,6 +300,7 @@ async def parse_jd(jd_text: str) -> dict:
         return extract_json(text, expected_keys=["role_title", "required_skills"])
     except Exception as e:
         print(f"JD parsing error: {e}")
+        with open("error.log", "w") as f: f.write(repr(e))
         return {
             "role_title": "Software Engineer",
             "required_skills": [],
@@ -392,7 +393,7 @@ async def match_candidates(parsed_jd: dict) -> tuple[list[dict], int]:
         result = await _score_single_candidate(parsed_jd, candidate)
         all_results.append(result)
         if idx < len(CANDIDATES) - 1:
-            await asyncio.sleep(1.0)
+            await asyncio.sleep(4.1)
 
     valid = [r for r in all_results if not r.get("fallback")]
     failed_count = len([r for r in all_results if r.get("fallback")])
@@ -494,7 +495,7 @@ async def simulate_outreach(parsed_jd: dict, top_matches: list[dict]) -> list[di
         result = await _simulate_single_outreach(parsed_jd, m)
         results.append(result)
         if idx < len(top_matches) - 1:
-            await asyncio.sleep(1.0)
+            await asyncio.sleep(4.1)
     return results
 
 
@@ -551,7 +552,7 @@ async def demo():
         raise HTTPException(status_code=404, detail="Sample output not found.")
     response = dict(SAMPLE_OUTPUT)
     response["pipeline_meta"] = {
-        "model": "gemini-2.5-flash",
+        "model": "gemini-flash-lite-latest",
         "total_gemini_calls": 26,
         "candidates_screened": 20,
         "candidates_scored_successfully": 20,
