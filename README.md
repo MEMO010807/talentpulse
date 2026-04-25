@@ -45,7 +45,7 @@ Built for the **Catalyst Hackathon** by **Deccan AI Experts**.
 | Layer | Technology |
 |-------|------------|
 | Backend | Python 3.11+, FastAPI, Uvicorn |
-| AI | Google Gemini 2.0 Flash (`google-generativeai`) |
+| AI | Google Gemini Flash Lite (`google-generativeai`) |
 | Frontend | Vanilla HTML/CSS/JS (single file) |
 | Data | Static JSON (20 candidates) |
 | Config | `.env` with `python-dotenv` |
@@ -154,11 +154,11 @@ Main pipeline endpoint. Parses JD, matches candidates, simulates outreach, retur
 
 ## 🧠 Architecture Decisions
 
-- **Gemini 2.0 Flash** — Chosen for speed (sub-second responses) which is critical for a <60s end-to-end demo. Flash provides good structured output quality at low latency.
+- **Gemini Flash Lite** — Chosen for speed and generous free-tier quotas (15 RPM). Perfect for a sub-20s end-to-end demo utilizing prompt batching.
 - **60/40 Weighting** — Skills match is necessary but not sufficient. A candidate who won't respond is a wasted outreach. The 40% interest weight balances fit vs. reachability.
 - **Simulated Outreach** — Real outreach takes days. Simulation gives recruiters a preview of likely candidate responsiveness, enabling smarter prioritization before spending time on actual outreach.
 - **Single-file Frontend** — Zero build step, zero dependencies. Open the file and it works. Perfect for a hackathon demo.
-- **Batch API Calls** — Candidates are scored in batches of 5 with delays to respect Gemini rate limits while maintaining parallelism.
+- **Batch API Calls** — We use the 1M token context window to process all 20 candidates and all 5 outreach simulations simultaneously. This consolidates 26 API calls down to just 3 calls, completely avoiding free-tier rate limits.
 
 ---
 
