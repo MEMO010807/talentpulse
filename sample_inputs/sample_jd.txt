@@ -1,0 +1,49 @@
+Senior Backend Engineer — FinStack Technologies
+
+About Us
+FinStack Technologies is a fast-growing fintech startup based in Bengaluru, backed by Sequoia Capital and Ribbit Capital. We're building the next-generation financial infrastructure for India — powering payments, lending, and wealth management for over 2 million users. Our platform processes INR 500 Cr+ in monthly transactions and is scaling rapidly. We believe in engineering excellence, ownership, and shipping fast without compromising reliability.
+
+Role Overview
+We are looking for a Senior Backend Engineer to join our Platform team. You'll design, build, and scale the core microservices that power our payments and lending products. This is a high-impact role where you'll work directly with the CTO and founding engineers to architect systems that handle millions of daily transactions with sub-100ms latency.
+
+Key Responsibilities
+- Design and develop high-performance RESTful APIs and microservices using Python
+- Own the architecture of critical payment processing and reconciliation pipelines
+- Build and maintain PostgreSQL schemas, optimize queries, and manage data integrity at scale
+- Implement caching strategies using Redis for low-latency data access
+- Containerize services with Docker and deploy on AWS using Kubernetes
+- Set up event-driven architectures using Kafka for real-time transaction streaming
+- Write clean, well-tested, production-grade code with comprehensive unit and integration tests
+- Collaborate with frontend, data, and DevOps teams in an agile environment
+- Participate in on-call rotations and incident management for production systems
+- Mentor junior engineers and contribute to engineering culture and best practices
+
+Required Skills & Qualifications
+- 4–6 years of professional software engineering experience
+- Strong proficiency in Python with production experience in FastAPI or Django
+- Deep experience with PostgreSQL — schema design, indexing, query optimization
+- Hands-on experience with Redis for caching and session management
+- Proficient with Docker for containerization and local development
+- Experience deploying and managing services on AWS (EC2, ECS, S3, RDS, Lambda)
+- Strong understanding of RESTful API design, authentication (OAuth/JWT), and rate limiting
+- B.Tech/B.E. or equivalent in Computer Science or related field
+
+Preferred Qualifications
+- Experience with Apache Kafka or similar event streaming platforms
+- Kubernetes experience for container orchestration in production
+- Prior experience in fintech, payments, or financial services domain
+- Familiarity with CI/CD pipelines (GitHub Actions, Jenkins)
+- Experience with observability tools (Prometheus, Grafana, ELK stack)
+- Contributions to open-source projects
+
+What We Offer
+- Competitive salary: INR 25–40 LPA based on experience
+- ESOPs with significant upside potential
+- Health insurance for you and your family
+- Hybrid work model — 3 days in our Koramangala, Bengaluru office
+- Learning budget of INR 1L/year for conferences, courses, and certifications
+- A culture of ownership, transparency, and engineering excellence
+
+Location: Bengaluru, India (Hybrid)
+Type: Full-time
+Experience: 4–6 years

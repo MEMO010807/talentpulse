@@ -1,0 +1,182 @@
+{
+  "parsed_jd": {
+    "role_title": "Senior Backend Engineer",
+    "required_skills": ["Python", "FastAPI", "Django", "PostgreSQL", "Redis", "Docker", "AWS"],
+    "preferred_skills": ["Kafka", "Kubernetes", "Fintech experience"],
+    "min_experience_years": 4,
+    "education_requirement": "B.Tech/B.E. or equivalent in Computer Science",
+    "role_type": "full-time",
+    "domain": "backend",
+    "key_responsibilities": [
+      "Design and develop high-performance RESTful APIs and microservices",
+      "Own architecture of payment processing pipelines",
+      "Build and maintain PostgreSQL schemas at scale",
+      "Implement caching strategies using Redis",
+      "Containerize services with Docker and deploy on AWS using Kubernetes",
+      "Set up event-driven architectures using Kafka"
+    ]
+  },
+  "shortlist": [
+    {
+      "rank": 1,
+      "candidate": {
+        "id": "c001",
+        "name": "Arjun Mehta",
+        "current_role": "Senior Backend Engineer",
+        "current_company": "Razorpay",
+        "years_experience": 6,
+        "education": "B.Tech Computer Science, IIT Bombay",
+        "skills": ["Python", "FastAPI", "PostgreSQL", "Redis", "Docker", "AWS", "Kafka", "Kubernetes"],
+        "domain": "backend",
+        "location": "Bengaluru, India",
+        "availability": "30 days",
+        "expected_ctc_lpa": 32,
+        "linkedin_url": "https://linkedin.com/in/arjun-mehta-dev",
+        "summary": "Experienced backend engineer with 6 years building high-throughput payment systems at Razorpay."
+      },
+      "match_score": 95,
+      "interest_score": 78,
+      "final_score": 88.2,
+      "matched_skills": ["Python", "FastAPI", "PostgreSQL", "Redis", "Docker", "AWS", "Kafka", "Kubernetes"],
+      "missing_skills": [],
+      "match_explanation": "Arjun is an excellent match with all required and preferred skills. His 6 years of fintech experience at Razorpay directly align with the role requirements.",
+      "conversation": [
+        {"role": "recruiter", "message": "Hi Arjun! I'm reaching out from FinStack Technologies. We're building next-gen payment infrastructure and your experience at Razorpay caught our eye. Would you be open to a quick chat about a Senior Backend Engineer role?"},
+        {"role": "candidate", "message": "Hey, thanks for reaching out! I've heard good things about FinStack. I'm not actively looking but always open to hearing about interesting opportunities in the payments space."},
+        {"role": "recruiter", "message": "Great to hear! The role involves owning microservices architecture for our core payment systems — very similar tech stack to what you've worked with. We're offering 25-40L with ESOPs. Want me to share the full JD?"},
+        {"role": "candidate", "message": "That sounds compelling. The scale and tech stack align well with what I enjoy working on. Sure, send over the JD and let's set up a call next week."}
+      ],
+      "interest_label": "Hot",
+      "interest_reasoning": "Arjun shows strong interest due to domain alignment with his current fintech work and competitive compensation."
+    },
+    {
+      "rank": 2,
+      "candidate": {
+        "id": "c008",
+        "name": "Meera Joshi",
+        "current_role": "Senior Software Engineer",
+        "current_company": "PhonePe",
+        "years_experience": 5,
+        "education": "B.Tech Computer Science, BITS Pilani",
+        "skills": ["Python", "FastAPI", "PostgreSQL", "Redis", "Docker", "AWS", "gRPC"],
+        "domain": "backend",
+        "location": "Bengaluru, India",
+        "availability": "30 days",
+        "expected_ctc_lpa": 28,
+        "linkedin_url": "https://linkedin.com/in/meera-joshi-swe",
+        "summary": "Senior backend engineer at PhonePe working on payment gateway services."
+      },
+      "match_score": 88,
+      "interest_score": 82,
+      "final_score": 85.6,
+      "matched_skills": ["Python", "FastAPI", "PostgreSQL", "Redis", "Docker", "AWS"],
+      "missing_skills": ["Kafka", "Kubernetes"],
+      "match_explanation": "Meera has strong core skills and direct fintech payment experience at PhonePe. Missing Kafka and Kubernetes but otherwise an excellent fit.",
+      "conversation": [
+        {"role": "recruiter", "message": "Hi Meera! I'm from FinStack Technologies, a fintech startup in Bengaluru. Your work on payment gateways at PhonePe is impressive — we'd love to discuss a Senior Backend Engineer role with us."},
+        {"role": "candidate", "message": "Hi! Thanks for the note. I've actually been thinking about exploring startup opportunities. What kind of scale are we talking about?"},
+        {"role": "recruiter", "message": "We process INR 500 Cr+ monthly and growing fast. You'd own critical payment and reconciliation services. The tech stack is Python, FastAPI, PostgreSQL, AWS — right in your wheelhouse."},
+        {"role": "candidate", "message": "That's exciting! I love the idea of having more ownership. I'm definitely interested — can we schedule a call this week?"}
+      ],
+      "interest_label": "Hot",
+      "interest_reasoning": "Meera is actively looking for startup opportunities and shows genuine enthusiasm about the role and ownership."
+    },
+    {
+      "rank": 3,
+      "candidate": {
+        "id": "c014",
+        "name": "Tanvi Bhatt",
+        "current_role": "Platform Engineer",
+        "current_company": "Razorpay",
+        "years_experience": 5,
+        "education": "B.Tech Computer Science, DAIICT Gandhinagar",
+        "skills": ["Python", "FastAPI", "PostgreSQL", "Docker", "AWS", "Kubernetes", "Redis", "Terraform"],
+        "domain": "backend",
+        "location": "Bengaluru, India",
+        "availability": "30 days",
+        "expected_ctc_lpa": 30,
+        "linkedin_url": "https://linkedin.com/in/tanvi-bhatt-platform",
+        "summary": "Platform engineer at Razorpay building internal developer tools and API gateways."
+      },
+      "match_score": 85,
+      "interest_score": 65,
+      "final_score": 77.0,
+      "matched_skills": ["Python", "FastAPI", "PostgreSQL", "Docker", "AWS", "Kubernetes", "Redis"],
+      "missing_skills": ["Kafka"],
+      "match_explanation": "Tanvi has nearly all required skills plus Kubernetes. Her platform engineering background at Razorpay is highly relevant to the infrastructure needs of this role.",
+      "conversation": [
+        {"role": "recruiter", "message": "Hi Tanvi! I noticed your platform engineering work at Razorpay. We're building financial infrastructure at FinStack and think you'd be a great fit for our Senior Backend Engineer role."},
+        {"role": "candidate", "message": "Thanks for reaching out. I'm relatively happy at Razorpay, but I'm curious — what makes FinStack different?"},
+        {"role": "recruiter", "message": "We're at a smaller scale which means more ownership and impact. You'd be architecting systems from the ground up rather than maintaining existing ones. Plus ESOPs with real upside."},
+        {"role": "candidate", "message": "That's fair. I'm not in a rush to move but the ownership angle is interesting. Could you share more details via email? I'll review and get back."}
+      ],
+      "interest_label": "Warm",
+      "interest_reasoning": "Tanvi is content in her current role but curious enough to continue the conversation. She needs more convincing."
+    },
+    {
+      "rank": 4,
+      "candidate": {
+        "id": "c016",
+        "name": "Pooja Kulkarni",
+        "current_role": "Backend Developer",
+        "current_company": "Slice",
+        "years_experience": 3,
+        "education": "B.Tech IT, College of Engineering Pune",
+        "skills": ["Python", "FastAPI", "PostgreSQL", "Docker", "AWS", "Redis"],
+        "domain": "backend",
+        "location": "Pune, India",
+        "availability": "immediate",
+        "expected_ctc_lpa": 16,
+        "linkedin_url": "https://linkedin.com/in/pooja-kulkarni-dev",
+        "summary": "Backend developer at Slice building credit card management APIs."
+      },
+      "match_score": 75,
+      "interest_score": 88,
+      "final_score": 80.2,
+      "matched_skills": ["Python", "FastAPI", "PostgreSQL", "Docker", "AWS", "Redis"],
+      "missing_skills": ["Kafka", "Kubernetes"],
+      "match_explanation": "Pooja has solid core skills and fintech experience at Slice. Slightly under on experience (3 vs 4 years required) and missing Kafka/K8s, but a strong growth candidate.",
+      "conversation": [
+        {"role": "recruiter", "message": "Hi Pooja! Your backend work at Slice is impressive. We're hiring a Senior Backend Engineer at FinStack Technologies — a fintech startup in Bengaluru. Interested?"},
+        {"role": "candidate", "message": "Hi! Absolutely, I've been looking for my next challenge. The fintech space is where I want to grow. What does the role involve?"},
+        {"role": "recruiter", "message": "You'd be building payment processing microservices — Python, FastAPI, PostgreSQL, AWS. We also use Kafka and Kubernetes. It's a hybrid role in Bengaluru."},
+        {"role": "candidate", "message": "That sounds perfect! I don't have Kafka/K8s experience yet but I'm a fast learner and eager to level up. I'm available immediately — when can we talk?"}
+      ],
+      "interest_label": "Hot",
+      "interest_reasoning": "Pooja is highly enthusiastic and actively job seeking. Despite minor skill gaps, her eagerness and availability make her a strong candidate."
+    },
+    {
+      "rank": 5,
+      "candidate": {
+        "id": "c013",
+        "name": "Siddharth Menon",
+        "current_role": "Backend Engineer",
+        "current_company": "Zerodha",
+        "years_experience": 4,
+        "education": "B.Tech ECE, NIT Surathkal",
+        "skills": ["Python", "Django", "PostgreSQL", "Redis", "Docker", "Linux", "Nginx"],
+        "domain": "backend",
+        "location": "Bengaluru, India",
+        "availability": "immediate",
+        "expected_ctc_lpa": 22,
+        "linkedin_url": "https://linkedin.com/in/siddharth-menon-be",
+        "summary": "Backend engineer at Zerodha building trading platform APIs."
+      },
+      "match_score": 72,
+      "interest_score": 60,
+      "final_score": 67.2,
+      "matched_skills": ["Python", "Django", "PostgreSQL", "Redis", "Docker"],
+      "missing_skills": ["FastAPI", "AWS", "Kafka", "Kubernetes"],
+      "match_explanation": "Siddharth has strong Python and Django skills with fintech experience at Zerodha. Lacks FastAPI and AWS experience but has relevant domain knowledge in financial services.",
+      "conversation": [
+        {"role": "recruiter", "message": "Hi Siddharth! Your work on trading APIs at Zerodha is fascinating. We have a Senior Backend Engineer opening at FinStack Technologies — would you be open to a chat?"},
+        {"role": "candidate", "message": "Hey, thanks. I'm somewhat open. What's the tech stack? I'm primarily a Django developer and would want to know if there's a learning curve."},
+        {"role": "recruiter", "message": "We use FastAPI primarily, but your Django and Python skills transfer well. The role also involves PostgreSQL, Redis, Docker, and AWS. We're happy to support the FastAPI ramp-up."},
+        {"role": "candidate", "message": "I see. I've been meaning to learn FastAPI. Let me think about it — the move from Zerodha would need to be worth it. Can you share the comp range?"}
+      ],
+      "interest_label": "Warm",
+      "interest_reasoning": "Siddharth is cautiously interested but concerned about the tech stack transition and needs strong financial incentives to move."
+    }
+  ],
+  "pipeline_summary": "Analyzed JD for 'Senior Backend Engineer'. Screened 20 candidates, shortlisted top 5. Simulated recruiter outreach for each shortlisted candidate. Final ranking uses 60% match score + 40% interest score."
+}
