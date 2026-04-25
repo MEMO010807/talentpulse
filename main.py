@@ -22,14 +22,14 @@ import google.generativeai as genai
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-load_dotenv()
+load_dotenv(override=True)
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 if not GEMINI_API_KEY or GEMINI_API_KEY == "your_gemini_api_key_here":
     print("[WARNING] GEMINI_API_KEY not set. Add it to .env file.")
 
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 # Generation configs (FIX-5)
 deterministic_config = genai.types.GenerationConfig(temperature=0.0)
@@ -551,7 +551,7 @@ async def demo():
         raise HTTPException(status_code=404, detail="Sample output not found.")
     response = dict(SAMPLE_OUTPUT)
     response["pipeline_meta"] = {
-        "model": "gemini-1.5-flash",
+        "model": "gemini-2.5-flash",
         "total_gemini_calls": 26,
         "candidates_screened": 20,
         "candidates_scored_successfully": 20,
@@ -598,7 +598,7 @@ async def analyze(req: AnalyzeRequest):
     total_calls = 1 + len(CANDIDATES) + len(top_matches)
 
     pipeline_meta = {
-        "model": "gemini-1.5-flash",
+        "model": "gemini-2.0-flash",
         "total_gemini_calls": total_calls,
         "candidates_screened": len(CANDIDATES),
         "candidates_scored_successfully": len(CANDIDATES) - failed_count,
