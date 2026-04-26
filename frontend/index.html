@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TalentPulse — AI-Powered Talent Scouting</title>
-<meta name="description" content="AI-Powered Talent Scouting & Engagement Agent. Go from a raw JD to a ranked candidate shortlist in under 60 seconds.">
+<meta name="description" content="AI-Powered Talent Scouting & Engagement Agent. Go from a raw JD to a ranked candidate shortlist in under 20 seconds.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -19,16 +19,10 @@ html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 h1,h2,h3,h4,.score-num{font-family:'Space Grotesk',sans-serif}
 a{color:var(--cyan);text-decoration:none}
-
-/* Layout */
 .container{max-width:900px;margin:0 auto;padding:0 24px}
-
-/* Header */
 header{padding:32px 0 16px;text-align:center;border-bottom:1px solid var(--bg3)}
 header h1{font-size:2rem;font-weight:700;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 header p{color:var(--text2);font-size:.95rem;margin-top:4px}
-
-/* Input Section */
 .input-section{margin-top:40px}
 .input-section label{font-weight:600;font-size:1.05rem;display:block;margin-bottom:10px}
 textarea{width:100%;min-height:200px;background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--radius);padding:16px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.95rem;resize:vertical;transition:border .2s}
@@ -41,28 +35,19 @@ textarea:focus{outline:none;border-color:var(--blue)}
 .btn-demo:hover{background:rgba(6,182,212,.1);transform:translateY(-1px)}
 .btn-demo:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .powered{color:var(--text3);font-size:.8rem;margin-top:10px}
-
-/* Loader */
 .loader-section{display:none;text-align:center;padding:60px 0}
 .loader-section.active{display:block}
 .spinner{width:48px;height:48px;border:3px solid var(--bg3);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 20px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loader-step{color:var(--cyan);font-size:1.05rem;font-weight:500;min-height:28px}
-
-/* Error */
 .error-box{display:none;background:rgba(239,68,68,.1);border:1px solid var(--red);border-radius:var(--radius-sm);padding:20px;text-align:center;margin-top:24px;color:var(--red)}
 .error-box.active{display:block}
 .btn-retry{margin-top:12px;padding:10px 24px;background:var(--red);color:#fff;border:none;border-radius:var(--radius-sm);font-weight:600;cursor:pointer}
-
-/* Demo banner */
-.demo-banner{background:#1e3a5f;color:#93c5fd;padding:10px 16px;border-radius:var(--radius-sm);font-size:.82rem;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-
-/* Pipeline meta bar */
+.demo-banner{background:#1e3a5f;color:#93c5fd;padding:10px 16px;border-radius:var(--radius-sm);font-size:.82rem;margin-bottom:16px;display:flex;align-items:center;gap:8px;border:1px solid #2563eb44}
+.warn-banner{background:#1c1a0f;color:#fbbf24;padding:10px 16px;border-radius:var(--radius-sm);font-size:.82rem;margin-top:12px;border:1px solid #fbbf2444}
 .meta-bar{display:flex;flex-wrap:wrap;gap:18px;padding:10px 0;font-size:.75rem;color:var(--text3);border-bottom:1px solid var(--bg3);margin-bottom:16px}
 .meta-bar span b{color:var(--text2)}
 .meta-bar .meta-fail{color:#f87171}
-
-/* Parsed JD */
 .parsed-jd{display:none;margin-top:40px;background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--radius);overflow:hidden}
 .parsed-jd.active{display:block;animation:fadeUp .5s ease}
 .parsed-jd-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;cursor:pointer;user-select:none}
@@ -77,15 +62,11 @@ textarea:focus{outline:none;border-color:var(--blue)}
 .tag{display:inline-block;padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:500;margin:2px 4px 2px 0}
 .tag-blue{background:rgba(37,99,235,.15);color:var(--blue)}
 .tag-cyan{background:rgba(6,182,212,.15);color:var(--cyan)}
-
-/* Results */
 .results-section{display:none;margin-top:32px}
 .results-section.active{display:block}
 .results-header{margin-bottom:24px}
 .results-header h2{font-size:1.4rem}
 .results-header p{color:var(--text2);font-size:.9rem;margin-top:4px}
-
-/* Candidate Card */
 .candidate-card{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--radius);padding:24px;margin-bottom:20px;opacity:0;animation:fadeUp .5s ease forwards}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .candidate-card:nth-child(1){animation-delay:.1s}
@@ -108,8 +89,6 @@ textarea:focus{outline:none;border-color:var(--blue)}
 .final-score-box{text-align:center;min-width:80px}
 .final-score-box .score-num{font-size:2rem;font-weight:700;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .final-score-box .score-label{font-size:.7rem;text-transform:uppercase;color:var(--text3);letter-spacing:.05em}
-
-/* Score Bars */
 .score-bars{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .score-bar-group label{font-size:.78rem;color:var(--text2);display:flex;justify-content:space-between;margin-bottom:4px}
 .score-track{height:8px;background:var(--bg4);border-radius:4px;overflow:hidden}
@@ -120,19 +99,11 @@ textarea:focus{outline:none;border-color:var(--blue)}
 .badge-hot{background:rgba(239,68,68,.15);color:#f87171}
 .badge-warm{background:rgba(245,158,11,.15);color:var(--amber)}
 .badge-cold{background:rgba(96,165,250,.15);color:#60a5fa}
-
-/* Score breakdown */
 .score-breakdown{font-size:.7rem;color:#64748b;margin-top:6px}
-
-/* Skills */
 .skills-row{margin-top:14px;display:flex;flex-wrap:wrap;gap:4px}
 .tag-green{background:rgba(16,185,129,.15);color:var(--green)}
 .tag-red{background:rgba(239,68,68,.1);color:#f87171}
-
-/* Explanation */
 .explanation{margin-top:12px;font-style:italic;color:var(--text2);font-size:.88rem;line-height:1.5}
-
-/* Conversation Toggle */
 .conv-toggle{margin-top:14px;padding:8px 16px;background:transparent;border:1px solid var(--bg4);border-radius:var(--radius-sm);color:var(--cyan);font-size:.85rem;font-weight:500;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
 .conv-toggle:hover{background:var(--bg3)}
 .conv-body{max-height:0;overflow:hidden;transition:max-height .5s ease}
@@ -146,11 +117,8 @@ textarea:focus{outline:none;border-color:var(--blue)}
 .candidate .chat-bubble{background:rgba(37,99,235,.2);border-bottom-right-radius:2px;color:var(--text)}
 .chat-role{font-size:.7rem;text-transform:uppercase;color:var(--text3);margin-bottom:2px;letter-spacing:.04em}
 .interest-reason{margin-top:8px;padding:10px 14px;background:var(--bg3);border-radius:var(--radius-sm);font-size:.84rem;color:var(--text2);border-left:3px solid var(--cyan)}
-
-/* Footer */
 footer{text-align:center;padding:40px 0 32px;color:var(--text3);font-size:.82rem;border-top:1px solid var(--bg3);margin-top:60px}
-
-/* Responsive */
+.empty-state{text-align:center;padding:40px 20px;color:var(--text2);font-size:1rem}
 @media(max-width:640px){
   .score-bars{grid-template-columns:1fr}
   .card-top{flex-direction:column;align-items:stretch}
@@ -170,7 +138,6 @@ footer{text-align:center;padding:40px 0 32px;color:var(--text3);font-size:.82rem
 </header>
 
 <main class="container">
-  <!-- Input -->
   <section class="input-section" id="inputSection">
     <label for="jdInput">Paste your Job Description</label>
     <textarea id="jdInput" placeholder="Paste your Job Description here..."></textarea>
@@ -181,19 +148,16 @@ footer{text-align:center;padding:40px 0 32px;color:var(--text3);font-size:.82rem
     <p class="powered">Powered by Gemini Flash Lite</p>
   </section>
 
-  <!-- Loader -->
   <section class="loader-section" id="loader">
     <div class="spinner"></div>
     <p class="loader-step" id="loaderStep">Parsing job description...</p>
   </section>
 
-  <!-- Error -->
   <div class="error-box" id="errorBox">
     <p id="errorMsg">Something went wrong.</p>
     <button class="btn-retry" onclick="handleScout()">Retry</button>
   </div>
 
-  <!-- Parsed JD -->
   <section class="parsed-jd" id="parsedJd">
     <div class="parsed-jd-header" id="parsedJdToggle" onclick="toggleParsedJd()">
       <h3>&#128203; Parsed Job Description</h3>
@@ -204,7 +168,6 @@ footer{text-align:center;padding:40px 0 32px;color:var(--text3);font-size:.82rem
     </div>
   </section>
 
-  <!-- Results -->
   <section class="results-section" id="resultsSection">
     <div id="demoBanner"></div>
     <div id="metaBar"></div>
@@ -213,6 +176,7 @@ footer{text-align:center;padding:40px 0 32px;color:var(--text3);font-size:.82rem
       <p id="pipelineSummary"></p>
     </div>
     <div id="candidatesList"></div>
+    <div id="warnBanner"></div>
   </section>
 </main>
 
@@ -222,7 +186,7 @@ footer{text-align:center;padding:40px 0 32px;color:var(--text3);font-size:.82rem
 
 <script>
 const API = 'http://localhost:8000';
-const STEPS = ['Parsing job description...','Matching candidates...','Simulating outreach conversations...','Ranking shortlist...'];
+const STEPS = ['Parsing job description...','Scoring all 20 candidates (batch)...','Simulating outreach conversations (batch)...','Ranking shortlist...'];
 let stepInterval;
 
 function showLoader(){
@@ -287,24 +251,24 @@ function renderPipelineMeta(meta){
   html += `<span>&#127919; <b>${meta.candidates_scored_successfully}</b>/${meta.candidates_screened} scored</span>`;
   html += `<span>&#9889; <b>${meta.total_gemini_calls}</b> API calls</span>`;
   html += `<span>&#9201; <b>${meta.wall_time_seconds}s</b></span>`;
-  html += `<span>&#9878; Match <b>${Math.round((meta.weights?.match||0.6)*100)}%</b> &middot; Interest <b>${Math.round((meta.weights?.interest||0.4)*100)}%</b></span>`;
+  html += `<span>&#9878; Match <b style="color:#2563eb">${Math.round((meta.weights?.match||0.6)*100)}%</b> &middot; Interest <b style="color:#06b6d4">${Math.round((meta.weights?.interest||0.4)*100)}%</b></span>`;
   if(meta.failed_scoring_count > 0){
-    html += `<span class="meta-fail">&#9888; ${meta.failed_scoring_count} scoring failures</span>`;
+    html += `<span class="meta-fail">&#9888; ${meta.failed_scoring_count} scoring failure(s)</span>`;
   }
   html += '</div>';
   return html;
 }
 
 function renderResults(data, isDemo){
-  // Demo banner (FIX-F1)
+  // FIX-F1: Demo banner
   const bannerEl = document.getElementById('demoBanner');
   if(isDemo){
-    bannerEl.innerHTML = '<div class="demo-banner">&#9889; Pre-computed demo &mdash; no Gemini API calls were made. Paste a real JD above to run live.</div>';
+    bannerEl.innerHTML = '<div class="demo-banner">&#9889; Pre-computed demo &mdash; no Gemini API calls were made. Paste a real JD above to run live inference.</div>';
   } else {
     bannerEl.innerHTML = '';
   }
 
-  // Pipeline meta (FIX-F2)
+  // Pipeline meta (FIX-F3)
   document.getElementById('metaBar').innerHTML = renderPipelineMeta(data.pipeline_meta);
 
   // Parsed JD
@@ -313,7 +277,7 @@ function renderResults(data, isDemo){
   html += `<div class="jd-field"><div class="jd-field-label">Role</div><strong>${esc(pjd.role_title||'')}</strong></div>`;
   html += `<div class="jd-field"><div class="jd-field-label">Domain</div>${esc(pjd.domain||'')}</div>`;
   html += `<div class="jd-field"><div class="jd-field-label">Experience</div>${pjd.min_experience_years||0}+ years</div>`;
-  html += `<div class="jd-field"><div class="jd-field-label">Education</div>${esc(pjd.education_requirement||'')}</div>`;
+  html += `<div class="jd-field"><div class="jd-field-label">Education</div>${esc(pjd.education_requirement||'Not specified')}</div>`;
   html += `<div class="jd-field"><div class="jd-field-label">Required Skills</div>${(pjd.required_skills||[]).map(s=>`<span class="tag tag-blue">${esc(s)}</span>`).join('')}</div>`;
   html += `<div class="jd-field"><div class="jd-field-label">Preferred Skills</div>${(pjd.preferred_skills||[]).map(s=>`<span class="tag tag-cyan">${esc(s)}</span>`).join('')}</div>`;
   document.getElementById('parsedJdContent').innerHTML = html;
@@ -327,14 +291,22 @@ function renderResults(data, isDemo){
   // Candidates
   const list = document.getElementById('candidatesList');
   list.innerHTML = '';
-  (data.shortlist||[]).forEach((item,idx)=>{
+
+  // Empty state guard
+  if(!data.shortlist || data.shortlist.length === 0){
+    list.innerHTML = '<div class="empty-state">No candidates could be scored. Try again or use Demo mode.</div>';
+    document.getElementById('resultsSection').classList.add('active');
+    return;
+  }
+
+  data.shortlist.forEach((item,idx)=>{
     const c = item.candidate;
     const rankClass = `rank-${item.rank}`;
     const interestEmoji = item.interest_label==='Hot'?'&#128293;':item.interest_label==='Warm'?'&#127780;':'&#10052;';
     const badgeClass = item.interest_label==='Hot'?'badge-hot':item.interest_label==='Warm'?'badge-warm':'badge-cold';
     const cardId = `card-${idx}`;
 
-    // Availability badge (FIX-F4)
+    // FIX-F5: Availability badge
     const availBadge = c.availability === 'not looking'
       ? '<span class="avail-badge avail-not-looking">not looking</span>'
       : `<span class="avail-badge avail-default">${esc(c.availability||'')}</span>`;
@@ -342,20 +314,25 @@ function renderResults(data, isDemo){
     let card = `<div class="candidate-card" id="${cardId}">`;
     card += '<div class="card-top">';
     card += `<div class="rank-badge ${rankClass}">#${item.rank}</div>`;
-    card += `<div class="card-info"><h3>${esc(c.name)}</h3><div class="subtitle">${esc(c.current_role)} at ${esc(c.current_company)} &middot; ${c.years_experience} yrs &middot; ${esc(c.location)} ${availBadge}</div></div>`;
+    card += `<div class="card-info"><h3>${esc(c.name)}</h3><div class="subtitle">${esc(c.current_role)} at ${esc(c.current_company)} &middot; ${c.years_experience} yrs &middot; ${esc(c.location||'')} ${availBadge}</div></div>`;
     card += `<div class="final-score-box"><div class="score-num">${item.final_score}</div><div class="score-label">Final Score</div></div>`;
     card += '</div>';
 
     // Score bars
     card += '<div class="score-bars">';
     card += `<div class="score-bar-group"><label><span>Match Score</span><span>${item.match_score}</span></label><div class="score-track"><div class="score-fill blue" data-w="${item.match_score}"></div></div></div>`;
-    card += `<div class="score-bar-group"><label><span>Interest Score <span class="interest-badge ${badgeClass}">${interestEmoji} ${esc(item.interest_label)}</span></span><span>${item.interest_score}</span></label><div class="score-track"><div class="score-fill cyan" data-w="${item.interest_score}"></div></div></div>`;
+    card += `<div class="score-bar-group"><label><span>Interest Score <span class="interest-badge ${badgeClass}">${interestEmoji} ${esc(item.interest_label||'')}</span></span><span>${item.interest_score}</span></label><div class="score-track"><div class="score-fill cyan" data-w="${item.interest_score}"></div></div></div>`;
     card += '</div>';
 
-    // Score breakdown (FIX-F3)
+    // FIX-F4: Score breakdown
     const sb = item.score_breakdown;
     if(sb){
-      card += `<div class="score-breakdown">Skills coverage: <b>${sb.skills_coverage_pct ?? '—'}%</b> &middot; Experience gap: <b>${sb.experience_gap_years === 0 ? 'none' : sb.experience_gap_years + 'yr short'}</b> &middot; Domain: <b>${sb.domain_match ? '&#10003;' : '&#10007;'}</b></div>`;
+      let bdHtml = `<div class="score-breakdown">Skills coverage: <b>${sb.skills_coverage_pct ?? '—'}%</b> &middot; Exp gap: <b>${sb.experience_gap_years === 0 ? 'none' : sb.experience_gap_years + 'yr short'}</b> &middot; Domain: <b>${sb.domain_match ? '&#10003; match' : '&#10007; mismatch'}</b>`;
+      if(item.llm_match_score != null){
+        bdHtml += ` &middot; LLM: <b>${item.llm_match_score}</b> Det: <b>${item.det_match_score}</b>`;
+      }
+      bdHtml += '</div>';
+      card += bdHtml;
     }
 
     // Skills
@@ -382,6 +359,14 @@ function renderResults(data, isDemo){
     card += '</div>';
     list.innerHTML += card;
   });
+
+  // FIX-F2: Failed candidates warning
+  const warnEl = document.getElementById('warnBanner');
+  if(data.failed_scoring_count > 0){
+    warnEl.innerHTML = `<div class="warn-banner">&#9888;&#65039; ${data.failed_scoring_count} candidate(s) could not be scored due to a transient API error. Shortlist reflects the remaining candidates.</div>`;
+  } else {
+    warnEl.innerHTML = '';
+  }
 
   document.getElementById('resultsSection').classList.add('active');
 
