@@ -1,6 +1,6 @@
 # ⚡ TalentPulse — AI-Powered Talent Scouting & Engagement Agent
 
-TalentPulse is an AI-powered recruiting tool that takes a raw Job Description and automatically parses it, matches candidates from a database, simulates recruiter outreach conversations, and returns a ranked shortlist — all in under 60 seconds.
+TalentPulse is an AI-powered recruiting tool that takes a raw Job Description and automatically parses it, batch-scores 20 candidates, simulates recruiter outreach conversations, and returns a ranked shortlist — all in under 20 seconds using just 3 API calls.
 
 Built for the **Catalyst Hackathon** by **Deccan AI Experts**.
 
@@ -11,7 +11,7 @@ Built for the **Catalyst Hackathon** by **Deccan AI Experts**.
 ```
 ┌─────────────┐     ┌──────────────┐     ┌─────────────────┐     ┌──────────────┐
 │  Recruiter   │────▶│   Frontend   │────▶│   FastAPI        │────▶│  Gemini API  │
-│  (Browser)   │◀────│  index.html  │◀────│   Backend        │◀────│  2.0 Flash   │
+│  (Browser)   │◀────│  index.html  │◀────│   Backend        │◀────│  Flash Lite  │
 └─────────────┘     └──────────────┘     └────────┬────────┘     └──────────────┘
                                                    │
                                           ┌────────▼────────┐
@@ -20,11 +20,11 @@ Built for the **Catalyst Hackathon** by **Deccan AI Experts**.
                                           └─────────────────┘
 ```
 
-**Pipeline Flow:**
-1. **JD Parsing** → Gemini extracts structured fields (skills, experience, domain)
-2. **Candidate Matching** → Each of the 20 candidates scored against the JD (0–100)
-3. **Outreach Simulation** → Top 5 candidates get a simulated 4-turn recruiter conversation
-4. **Final Ranking** → Combined score = 60% Match + 40% Interest → sorted shortlist
+**Pipeline Flow (3 API calls total):**
+1. **JD Parsing** (Call 1) → Gemini extracts structured fields (skills, experience, domain)
+2. **Batch Scoring** (Call 2) → All 20 candidates scored in one prompt, blended with deterministic formula
+3. **Batch Outreach** (Call 3) → Top 5 candidates get simulated 4-turn conversations in one prompt
+4. **Final Ranking** (Local) → `final_score = match_score × 0.6 + interest_score × 0.4`
 
 ---
 
