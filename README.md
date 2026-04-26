@@ -150,22 +150,6 @@ Main pipeline endpoint. Parses JD, matches candidates, simulates outreach, retur
 - **Sample JD:** [`sample_inputs/sample_jd.txt`](sample_inputs/sample_jd.txt)
 - **Sample Output:** [`sample_outputs/sample_output.json`](sample_outputs/sample_output.json)
 
----
-
-## 👨‍⚖️ Judge Demo Script (30 seconds)
-
-1. Open http://localhost:8000/frontend/index.html
-2. Paste the sample JD from `sample_inputs/sample_jd.txt` into the textarea
-3. Click "Scout Candidates →"
-4. Wait ~10–15 seconds for the 3-call pipeline to complete
-5. Review the **Parsed JD** card — verify skill extraction
-6. Note the **Pipeline Meta bar** — 3 API calls, wall time shown
-7. Open the **top candidate card** — expand the conversation
-8. Point at the **Score Breakdown** row — explain the blended formula:
-   - Det score = skills formula (verifiable in Python)
-   - LLM score = holistic AI judgment
-   - Final = 60% match + 40% interest
-
 ⚡ To demo without API calls: click "Try Demo" — uses pre-computed results.
 
 ---
