@@ -403,8 +403,14 @@ function renderResults(data){
 
     // Skills
     card += '<div class="skills-row">';
-    (item.matched_skills||[]).forEach(s=>{card+=`<span class="tag tag-green">${esc(s)}</span>`});
-    (item.missing_skills||[]).forEach(s=>{card+=`<span class="tag tag-red">${esc(s)}</span>`});
+    const matched = item.matched_skills || [];
+    const missing = item.missing_skills || [];
+    if (matched.length === 0 && missing.length === 0) {
+      card += `<span style="color:#64748b;font-size:0.8rem;font-style:italic;">No specific skills identified</span>`;
+    } else {
+      matched.forEach(s=>{card+=`<span class="tag tag-green">${esc(s)}</span>`});
+      missing.forEach(s=>{card+=`<span class="tag tag-red">${esc(s)}</span>`});
+    }
     card += '</div>';
 
     // Explanation

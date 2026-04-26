@@ -206,6 +206,7 @@ in Python with no LLM involvement.
 ## 🧠 Architecture Decisions
 
 - **Gemini Flash Lite** — Chosen for speed and generous free-tier quotas (15 RPM). Perfect for a sub-20s end-to-end demo utilizing prompt batching.
+- **Top-of-Funnel Truncation** — The pipeline scores all 20 candidates on skills but only runs the 4-turn outreach simulation on the Top 5. This explicitly mirrors real-world recruiter workflows (you only engage the most technically qualified leads) and prevents highly interested but totally unqualified candidates from polluting the final shortlist.
 - **60/40 Weighting** — Skills match is necessary but not sufficient. A candidate who won't respond is a wasted outreach. The 40% interest weight balances fit vs. reachability.
 - **Simulated Outreach** — Real outreach takes days. Simulation gives recruiters a preview of likely candidate responsiveness, enabling smarter prioritization before spending time on actual outreach.
 - **Single-file Frontend** — Zero build step, zero dependencies. Open the file and it works. Perfect for a hackathon demo.

@@ -505,6 +505,12 @@ Return the JSON array now. Exactly {n} objects. No other text."""
             breakdown = make_score_breakdown(full, parsed_jd)
             llm_score = max(0, min(100, int(item.get("match_score", 0))))
             det_score = compute_deterministic_match(breakdown)
+            
+            # Divergence Guard: Prevent unhinged LLM hallucination
+            if abs(llm_score - det_score) > 35:
+                print(f"[DIVERGENCE GUARD] Snapping LLM score ({llm_score}) to Det score ({det_score}) for {cid}")
+                llm_score = det_score
+
             # Blend: 50% LLM holistic judgment + 50% deterministic formula
             final_match = round(llm_score * 0.5 + det_score * 0.5)
             
