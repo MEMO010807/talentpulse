@@ -221,14 +221,69 @@ async function handleScout(){
   if(!jd){alert('Please paste a Job Description first.');return;}
   if(jd.length < 50){alert('Job description is too short (minimum 50 characters).');return;}
   showLoader();
-  try{
-    const res = await fetch(`${API}/api/analyze`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({job_description:jd})});
-    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.detail||`Server error ${res.status}`);}
+
+  try {
+    const res = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ job_description: jd })
+    });
+
+    if (!res.ok) {
+      console.warn(`Pipeline failed (${res.status}). Retrying once...`);
+      // Show a non-alarming retry message in the loading state
+      const el = document.getElementById('loaderStep');
+      if (el) el.textContent = 'Retrying\u2026';
+      await new Promise(r => setTimeout(r, 1500));
+
+      try {
+        const retryRes = await fetch('/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ job_description: jd })
+        });
+        if (retryRes.ok) {
+          const retryData = await retryRes.json();
+          window._isDemoMode = false;
+          window._demoFallback = false;
+          hideLoader();
+          renderResults(retryData);
+          return;
+        }
+      } catch (retryErr) {
+        console.warn('Retry also failed:', retryErr);
+      }
+
+      // Both attempts failed — fall back to demo
+      window._isDemoMode = true;
+      window._demoFallback = true;
+      const demoRes = await fetch('/api/demo');
+      const demoData = await demoRes.json();
+      hideLoader();
+      renderResults(demoData);
+      return;
+    }
+
     const data = await res.json();
+    window._isDemoMode = false;
+    window._demoFallback = false;
     hideLoader();
-    renderResults(data, false);
-  }catch(err){
-    showError(err.message||'Failed to connect to the API. Is the server running?');
+    renderResults(data);
+
+  } catch (err) {
+    // Network failure — same fallback
+    console.warn('Network error. Falling back to demo mode.', err);
+    window._isDemoMode = true;
+    window._demoFallback = true;
+    try {
+      const demoRes = await fetch('/api/demo');
+      const demoData = await demoRes.json();
+      hideLoader();
+      renderResults(demoData);
+    } catch {
+      hideLoader();
+      showError('Pipeline unavailable and demo mode failed. Please check your connection.');
+    }
   }
 }
 
@@ -239,7 +294,9 @@ async function handleDemo(){
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.detail||`Server error ${res.status}`);}
     const data = await res.json();
     hideLoader();
-    renderResults(data, true);
+    window._isDemoMode = true;
+    window._demoFallback = false;
+    renderResults(data);
   }catch(err){
     showError(err.message||'Failed to load demo. Is the server running?');
   }
@@ -253,17 +310,21 @@ function renderPipelineMeta(meta){
   html += `<span>&#9201; <b>${meta.wall_time_seconds}s</b></span>`;
   html += `<span>&#9878; Match <b style="color:#2563eb">${Math.round((meta.weights?.match||0.6)*100)}%</b> &middot; Interest <b style="color:#06b6d4">${Math.round((meta.weights?.interest||0.4)*100)}%</b></span>`;
   if(meta.failed_scoring_count > 0){
-    html += `<span class="meta-fail">&#9888; ${meta.failed_scoring_count} scoring failure(s)</span>`;
+    html += `<span class="meta-fail">&#9888; ${meta.failed_scoring_count} scoring failure(s) &middot; Partial shortlist</span>`;
   }
   html += '</div>';
   return html;
 }
 
-function renderResults(data, isDemo){
+function renderResults(data){
   // FIX-F1: Demo banner
   const bannerEl = document.getElementById('demoBanner');
-  if(isDemo){
-    bannerEl.innerHTML = '<div class="demo-banner">&#9889; Pre-computed demo &mdash; no Gemini API calls were made. Paste a real JD above to run live inference.</div>';
+  if (window._demoFallback) {
+    // Show as warning, not info
+    bannerEl.innerHTML = '<div class="demo-banner" style="background:#1c1a0f;color:#fbbf24;border:1px solid #fbbf2444;">&#9888;&#65039; Live scoring unavailable (API quota or network issue). Showing pre-computed demo results so you can still see the full flow.</div>';
+  } else if (window._isDemoMode) {
+    // Normal voluntary demo — blue info style
+    bannerEl.innerHTML = '<div class="demo-banner" style="background:#1e3a5f;color:#93c5fd;border:1px solid #2563eb44;">&#9889; Pre-computed demo &mdash; no Gemini API calls were made. Paste a real JD above to run live inference.</div>';
   } else {
     bannerEl.innerHTML = '';
   }
@@ -314,7 +375,7 @@ function renderResults(data, isDemo){
     let card = `<div class="candidate-card" id="${cardId}">`;
     card += '<div class="card-top">';
     card += `<div class="rank-badge ${rankClass}">#${item.rank}</div>`;
-    card += `<div class="card-info"><h3>${esc(c.name)}</h3><div class="subtitle">${esc(c.current_role)} at ${esc(c.current_company)} &middot; ${c.years_experience} yrs &middot; ${esc(c.location||'')} ${availBadge}</div></div>`;
+    card += `<div class="card-info"><h3>${esc(c.name)}</h3><div style="font-size:12px;color:#64748b;margin-top:2px;margin-bottom:8px;">${esc(buildFitSummary(item))}</div><div class="subtitle">${esc(c.current_role)} at ${esc(c.current_company)} &middot; ${c.years_experience} yrs &middot; ${esc(c.location||'')} ${availBadge}</div></div>`;
     card += `<div class="final-score-box"><div class="score-num">${item.final_score}</div><div class="score-label">Final Score</div></div>`;
     card += '</div>';
 
@@ -332,6 +393,11 @@ function renderResults(data, isDemo){
         bdHtml += ` &middot; LLM: <b>${item.llm_match_score}</b> Det: <b>${item.det_match_score}</b>`;
       }
       bdHtml += '</div>';
+      bdHtml += `
+      <div style="font-size:11px;color:#475569;margin-top:2px;font-style:italic;">
+        LLM score reflects qualitative fit: role alignment, seniority signal, and skill synergy.
+        Det score is computed from the formula above.
+      </div>`;
       card += bdHtml;
     }
 
@@ -363,7 +429,7 @@ function renderResults(data, isDemo){
   // FIX-F2: Failed candidates warning
   const warnEl = document.getElementById('warnBanner');
   if(data.failed_scoring_count > 0){
-    warnEl.innerHTML = `<div class="warn-banner">&#9888;&#65039; ${data.failed_scoring_count} candidate(s) could not be scored due to a transient API error. Shortlist reflects the remaining candidates.</div>`;
+    warnEl.innerHTML = `<div class="warn-banner">&#9888;&#65039; Showing best available results — ${data.failed_scoring_count} of 20 candidates could not be scored due to a transient AI response. Rankings reflect available data.</div>`;
   } else {
     warnEl.innerHTML = '';
   }
@@ -384,6 +450,39 @@ function toggleConv(id){
   document.getElementById(id).classList.toggle('open');
 }
 function esc(s){const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
+
+function buildFitSummary(result) {
+  const bd = result.score_breakdown || {};
+  const parts = [];
+
+  if (bd.skills_coverage_pct >= 80) {
+    parts.push(`strong skill match (${bd.skills_coverage_pct}%)`);
+  } else if (bd.skills_coverage_pct >= 50) {
+    parts.push(`partial skill match (${bd.skills_coverage_pct}%)`);
+  } else {
+    parts.push(`limited skill overlap (${bd.skills_coverage_pct}%)`);
+  }
+
+  if (bd.experience_gap_years === 0) {
+    parts.push('meets experience requirement');
+  } else {
+    parts.push(`${bd.experience_gap_years}yr experience gap`);
+  }
+
+  if (bd.domain_match) {
+    parts.push('domain match');
+  }
+
+  const label = result.interest_label || 'Warm';
+  const interestText = label === 'Hot'
+    ? 'high engagement signal'
+    : label === 'Cold'
+    ? 'low engagement signal'
+    : 'moderate engagement signal';
+  parts.push(interestText);
+
+  return parts.join(' \u00B7 ');
+}
 </script>
 </body>
 </html>

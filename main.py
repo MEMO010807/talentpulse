@@ -28,11 +28,14 @@ from google.generativeai.types import GenerationConfig
 # ---------------------------------------------------------------------------
 load_dotenv(override=True)
 
+# FIX-7: Pin model name
+MODEL_NAME = "gemini-flash-lite-latest"   # pin to explicit ID if this breaks
+
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
 
-model = genai.GenerativeModel("gemini-flash-lite-latest")
+model = genai.GenerativeModel(MODEL_NAME)
 
 # Structured JSON configs
 JSON_CONFIG = GenerationConfig(
@@ -157,6 +160,59 @@ def sanitise_jd(text: str, max_chars: int = 3000) -> str:
     return text.strip()
 
 
+def validate_matched_skills(
+    returned_matched: list[str],
+    candidate_actual_skills: list[str]
+) -> list[str]:
+    """
+    Return only skills that genuinely appear in the candidate's actual profile.
+    Discards any hallucinated or cross-contaminated skills.
+    Uses case-insensitive comparison.
+    """
+    actual_lower = {s.lower() for s in candidate_actual_skills}
+    validated = [s for s in returned_matched if s.lower() in actual_lower]
+    return validated
+
+
+def _is_valid_score_item(item: dict) -> bool:
+    """
+    Returns True only if the item has the minimum valid structure
+    to be safely used in scoring. Rejects type mismatches and
+    out-of-range values before they can corrupt the ranking.
+    """
+    if not isinstance(item, dict):
+        return False
+    if not isinstance(item.get("candidate_id"), str):
+        return False
+    score = item.get("match_score") or item.get("llm_score")
+    if score is None:
+        return False
+    try:
+        s = int(score)
+        if not (0 <= s <= 100):
+            return False
+    except (ValueError, TypeError):
+        return False
+    if not isinstance(item.get("matched_skills"), list):
+        # Coerce None or string to empty list rather than failing
+        item["matched_skills"] = []
+    if not isinstance(item.get("missing_skills"), list):
+        item["missing_skills"] = []
+    return True
+
+
+def _trim_for_scoring(candidate: dict) -> dict:
+    """Strip PII and trim verbose fields to reduce token bloat."""
+    trimmed = {k: v for k, v in candidate.items() if k in SCORER_FIELDS}
+    # Truncate summary to 150 chars — enough for context, not enough to pad
+    if "summary" in trimmed and isinstance(trimmed["summary"], str):
+        trimmed["summary"] = trimmed["summary"][:150]
+    # Cap skills list to 12 items — beyond this adds noise, not signal
+    if "skills" in trimmed and isinstance(trimmed["skills"], list):
+        trimmed["skills"] = trimmed["skills"][:12]
+    return trimmed
+
+
 # ---------------------------------------------------------------------------
 # Central Gemini call wrapper (FIX-2)
 # ---------------------------------------------------------------------------
@@ -218,7 +274,7 @@ async def gemini_json_call(
     prompt: str,
     creative: bool = False,
     max_retries: int = 3,
-    call_timeout: float = 45.0,
+    call_timeout: float = 12.0,
 ) -> dict | list:
     """Call Gemini, try JSON mode first, fall back to text mode with extraction."""
     json_config = CREATIVE_CONFIG if creative else JSON_CONFIG
@@ -346,7 +402,7 @@ def compute_deterministic_match(breakdown: dict) -> int:
 async def match_candidates_batch(parsed_jd: dict) -> tuple[list[dict], int]:
     """Score all candidates in a single Gemini call."""
     safe_candidates = [
-        {k: v for k, v in c.items() if k in SCORER_FIELDS}
+        _trim_for_scoring(c)
         for c in candidates
     ]
     n = len(safe_candidates)
@@ -386,6 +442,16 @@ CALIBRATION ANCHORS (use these to anchor your scoring range):
 {json.dumps(jd_summary, indent=2)}
 </jd>
 
+STRICT ISOLATION RULES — apply before scoring each candidate:
+- Evaluate each candidate COMPLETELY INDEPENDENTLY.
+- Use ONLY the data inside that candidate's JSON object.
+- Do NOT reference, compare, or copy information from any other candidate.
+- Do NOT reuse explanation text from a previous candidate.
+- If you are uncertain about a field, output a conservatively lower score.
+  Never guess or borrow from another profile.
+- Each explanation must describe THIS candidate only, using only their skills
+  and experience as listed.
+
 <candidates>
 {json.dumps(safe_candidates, indent=2)}
 </candidates>
@@ -396,6 +462,22 @@ Return the JSON array now. Exactly {n} objects. No other text."""
         raw = await gemini_json_call(prompt)
         if not isinstance(raw, list):
             raise ValueError(f"Expected list, got {type(raw)}")
+            
+        if len(raw) < n:
+            print(f"[BATCH SCORING] Got {len(raw)}/{n} results. Retrying with count hint.")
+            retry_prompt = (
+                f"CRITICAL: You must return EXACTLY {n} JSON objects, "
+                f"one per candidate. Your previous response was incomplete.\n\n"
+                + prompt
+            )
+            try:
+                raw_retry = await gemini_json_call(retry_prompt)
+                if isinstance(raw_retry, list):
+                    raw = raw_retry
+            except Exception as retry_err:
+                print(f"[BATCH SCORING RETRY FAILED] {retry_err}")
+                # Accept original partial result
+                
     except Exception as e:
         print(f"[BATCH SCORING FAILED] {e}")
         return [], n
@@ -409,6 +491,11 @@ Return the JSON array now. Exactly {n} objects. No other text."""
     failed_count = 0
 
     for item in raw:
+        if not _is_valid_score_item(item):
+            print(f"[ITEM VALIDATION FAILED] Skipping malformed item: {str(item)[:100]}")
+            failed_count += 1
+            continue
+
         cid = item.get("candidate_id") or item.get("id")
         if not cid or cid not in candidate_map:
             failed_count += 1
@@ -420,12 +507,18 @@ Return the JSON array now. Exactly {n} objects. No other text."""
             det_score = compute_deterministic_match(breakdown)
             # Blend: 50% LLM holistic judgment + 50% deterministic formula
             final_match = round(llm_score * 0.5 + det_score * 0.5)
+            
+            validated_matched = validate_matched_skills(
+                item.get("matched_skills", []),
+                full.get("skills", [])
+            )
+            
             enriched.append({
                 "candidate": full,
                 "match_score": final_match,
                 "llm_match_score": llm_score,
                 "det_match_score": det_score,
-                "matched_skills": item.get("matched_skills", []),
+                "matched_skills": validated_matched,
                 "missing_skills": item.get("missing_skills", []),
                 "match_explanation": item.get("explanation", ""),
                 "score_breakdown": breakdown,
@@ -586,7 +679,7 @@ async def demo():
         raise HTTPException(status_code=404, detail="Sample output not found.")
     response = dict(sample_output)
     response["pipeline_meta"] = {
-        "model": "gemini-flash-lite-latest",
+        "model": MODEL_NAME,
         "total_gemini_calls": 3,
         "candidates_screened": 20,
         "candidates_scored_successfully": 20,
@@ -643,7 +736,7 @@ async def analyze(request: AnalyzeRequest):
         "shortlist": ranked,
         "failed_scoring_count": failed_count,
         "pipeline_meta": {
-            "model": "gemini-flash-lite-latest",
+            "model": MODEL_NAME,
             "total_gemini_calls": 3,
             "candidates_screened": len(candidates),
             "candidates_scored_successfully": len(candidates) - failed_count,

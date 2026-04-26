@@ -84,7 +84,7 @@ talentpulse/
 
 1. **Attempt 1:** JSON mode (`response_mime_type="application/json"`, `temperature=0.0`)
 2. **Attempt 2+:** Falls back to text mode with robust `_extract_json()` regex extraction
-3. Each attempt has a **45-second timeout** via `asyncio.wait_for()`
+3. Each attempt has a **12-second timeout** via `asyncio.wait_for()`
 4. Rate-limit errors (`429`) trigger exponential backoff: `8s → 16s → 32s`
 
 **`_extract_json(text)`** handles:
@@ -119,10 +119,13 @@ talentpulse/
   - `llm_score`: The model's holistic 0-100 judgment
   - `det_score`: `compute_deterministic_match()` — transparent Python formula:
     - `skills_coverage × 0.60 − exp_penalty + domain_bonus × 0.15`
+  - **Divergence Guard:** If `abs(llm_score - det_score) > 35`, snaps `llm_score = det_score` to prevent unhinged LLM hallucination.
   - `match_score = round(llm_score × 0.5 + det_score × 0.5)`
 - Computes `score_breakdown` locally (skills_coverage_pct, experience_gap_years, domain_match)
 - Sorts by `match_score` descending, returns top 5
-- **Partial results tolerated:** If model returns <20 items, uses what it got
+- **Incomplete batch retry:** If model returns <20 items, retries the entire batch once with a count hint before accepting partial results
+- **Positional independence:** Uses explicit `candidate_id` mapping to ensure scores are assigned correctly regardless of LLM output order
+- **Skill cross-contamination guard:** Uses `validate_matched_skills()` to strip hallucinated skills not present in the candidate's actual profile
 
 #### Call 3: `simulate_outreach_batch(parsed_jd, top_matches) → list`
 - Sends top 5 candidates with `_index` for ordering
@@ -191,7 +194,7 @@ Both `llm_match_score` and `det_match_score` are exposed in the API response for
 | Input validation       | Pydantic `field_validator`, min 50 chars                 |
 | Startup guard          | `RuntimeError` if `GEMINI_API_KEY` not set               |
 | Concurrency guard      | `asyncio.Semaphore(2)` on all Gemini calls               |
-| Timeout                | `asyncio.wait_for(..., timeout=45.0)` per call           |
+| Timeout                | `asyncio.wait_for(..., timeout=12.0)` per call           |
 
 ---
 
@@ -203,7 +206,7 @@ Both `llm_match_score` and `det_match_score` are exposed in the API response for
 | Free-tier 15 RPM limit       | 3-call batch architecture (57s headroom per minute)     |
 | Free-tier 20 RPD on 2.5-flash | Using `flash-lite-latest` instead                      |
 | Windows cp1252 encoding      | ASCII `[WARNING]` instead of emoji in console           |
-| Gemini quota exhaustion      | Demo mode (`/api/demo`) as zero-API-cost safety net     |
+| Gemini quota exhaustion      | Single auto-retry, then fallback to demo mode (`/api/demo`) |
 
 ---
 

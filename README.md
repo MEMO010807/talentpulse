@@ -152,6 +152,57 @@ Main pipeline endpoint. Parses JD, matches candidates, simulates outreach, retur
 
 ---
 
+## 👨‍⚖️ Judge Demo Script (30 seconds)
+
+1. Open http://localhost:8000/frontend/index.html
+2. Paste the sample JD from `sample_inputs/sample_jd.txt` into the textarea
+3. Click "Scout Candidates →"
+4. Wait ~10–15 seconds for the 3-call pipeline to complete
+5. Review the **Parsed JD** card — verify skill extraction
+6. Note the **Pipeline Meta bar** — 3 API calls, wall time shown
+7. Open the **top candidate card** — expand the conversation
+8. Point at the **Score Breakdown** row — explain the blended formula:
+   - Det score = skills formula (verifiable in Python)
+   - LLM score = holistic AI judgment
+   - Final = 60% match + 40% interest
+
+⚡ To demo without API calls: click "Try Demo" — uses pre-computed results.
+
+---
+
+## 🧮 Scoring Formula (Explainability)
+
+All scoring logic is transparent and auditable:
+
+```text
+det_score   = skills_coverage_pct × 0.60
+            − min(experience_gap_years × 10, 30)
+            + (15 if domain_match else 0)
+
+match_score = round(llm_holistic × 0.5 + det_score × 0.5)
+
+final_score = match_score × 0.60 + interest_score × 0.40
+```
+
+Both `llm_match_score` and `det_match_score` are returned in the API response
+for independent verification. The deterministic component is computed locally
+in Python with no LLM involvement.
+
+---
+
+## ⚠️ Known Limitations
+
+- **Free tier quota:** Uses `gemini-flash-lite-latest` (15 RPM). Under quota
+  pressure, some candidates may not be scored. The frontend shows a warning
+  and returns the best available partial results.
+- **Occasional JSON fallback:** The SDK intermittently returns malformed JSON
+  in JSON mode. The pipeline automatically retries in text mode — this adds
+  ~2–4 seconds on affected calls but does not crash the pipeline.
+- **Demo mode:** `/api/demo` serves pre-computed results with zero API calls.
+  Use this if Gemini quota is exhausted during judging.
+
+---
+
 ## 🧠 Architecture Decisions
 
 - **Gemini Flash Lite** — Chosen for speed and generous free-tier quotas (15 RPM). Perfect for a sub-20s end-to-end demo utilizing prompt batching.
